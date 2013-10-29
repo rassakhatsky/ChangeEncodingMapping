@@ -33,18 +33,24 @@ public class ChangeEncoding extends AbstractTransformation {
 
     @Override
     public void transform(TransformationInput ti, TransformationOutput to) throws StreamTransformationException {
+        getTrace().addInfo("Start transformation");        
+        
         StringBuilder preSource = new StringBuilder("");
         preSource = convertStreamToString(ti.getInputPayload().getInputStream());
+        getTrace().addInfo("Get Input Data - successful");
+        
         String strData = null;
-        try {
+        try {            
             strData = new String(preSource.toString().getBytes("ISO-8859-1"), "UTF-8");
+            getTrace().addInfo("Start encoding");
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ChangeEncoding.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             // Specify the Encoding type you would like to have in Below line(un comment one you like).
             to.getOutputPayload().getOutputStream().write(strData.getBytes("windows-1251"));
-
+            getTrace().addInfo("Finish encoding");
+            
         } catch (IOException e) {
         }
     }
