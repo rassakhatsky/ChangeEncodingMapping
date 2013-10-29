@@ -33,9 +33,6 @@ public class ChangeEncoding extends AbstractTransformation {
 
     @Override
     public void transform(TransformationInput ti, TransformationOutput to) throws StreamTransformationException {
-        //getTrace().addInfo("File Reading started ");
-        //String strData = convertStreamToString(ti.getInputPayload().getInputStream());
-        //String result = new String((ti.getInputPayload().getInputStream(), "cp1258");
         StringBuilder preSource = new StringBuilder("");
         preSource = convertStreamToString(ti.getInputPayload().getInputStream());
         String strData = null;
@@ -44,11 +41,7 @@ public class ChangeEncoding extends AbstractTransformation {
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ChangeEncoding.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        getTrace().addInfo("File Reading successfully completed ");
-
         try {
-            getTrace().addInfo("Generating XML started");
             // Specify the Encoding type you would like to have in Below line(un comment one you like).
             to.getOutputPayload().getOutputStream().write(strData.getBytes("windows-1251"));
 
