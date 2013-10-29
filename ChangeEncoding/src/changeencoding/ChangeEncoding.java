@@ -33,34 +33,40 @@ public class ChangeEncoding extends AbstractTransformation {
 
     @Override
     public void transform(TransformationInput ti, TransformationOutput to) throws StreamTransformationException {
-        getTrace().addInfo("Start transformation");        
-        
+        String default_encoding = "UTF-8";
+        String encoding = "windows-1251";
         StringBuilder preSource = new StringBuilder("");
-        preSource = convertStreamToString(ti.getInputPayload().getInputStream());
-        getTrace().addInfo("Get Input Data - successful");
+        
+        //getTrace().addInfo("Start transformation");        
+        
+        preSource = convertStreamToString(ti.getInputPayload().getInputStream(), default_encoding, encoding);
+        //getTrace().addInfo("Get Input Data - successful");
         
         String strData = null;
         try {            
             strData = new String(preSource.toString().getBytes("ISO-8859-1"), "UTF-8");
-            getTrace().addInfo("Start encoding");
+            //getTrace().addInfo("Start encoding");
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ChangeEncoding.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             // Specify the Encoding type you would like to have in Below line(un comment one you like).
             to.getOutputPayload().getOutputStream().write(strData.getBytes("windows-1251"));
-            getTrace().addInfo("Finish encoding");
+            //getTrace().addInfo("Finish encoding");
             
         } catch (IOException e) {
         }
     }
 
-    public StringBuilder convertStreamToString(InputStream in) {
+    public StringBuilder convertStreamToString(InputStream in, String default_encoding, String encoding) {
         StringBuilder sb = new StringBuilder();
         try {
             int ch;
             while ((ch = in.read()) > -1) {
                 sb.append((char) ch);
+                if(sb.length()==(30+default_encoding.length())){
+                    sb.replace(30, 30+default_encoding.length(), encoding);                   
+                }
             }
         } catch (IOException exception) {
         }
